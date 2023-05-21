@@ -1,0 +1,37 @@
+@startuml
+
+node servicoPagamento as "Servidor Serviço de Pagamentos"
+node servicoSIPNI as "Servidor Serviço SI-PNI"
+node servicoFornecedores as "Servidor Serviço de Fornecedores"
+node servicoConvenios as "Servidor Serviço de Convênios"
+node servicoAutenticacao as "Servidor Serviço de Autenticação"
+
+
+node servidorInterno as "Servidor Aplicação Interna" 
+node servidorExterno as "Servidor Aplicação Externa"
+database bancoDeDados as "Banco de Dados Corporativo"
+
+node dispositivoMonitoramento as "Dispositivo Monitoramento"
+
+node dispositivoFuncionario as "Dispositivo Funcionário"
+
+node clienteWeb as "Cliente Externo Web"
+
+node clienteMobile as "Cliente Externo Mobile"
+
+servidorInterno -- servicoPagamento : <<HTTP>>
+servidorInterno -- servicoFornecedores : <<HTTP>>
+servidorInterno -- servicoSIPNI : <<HTTP>>
+servidorInterno -- servicoConvenios : <<HTTP>>
+servidorInterno -- servicoAutenticacao : <<HTTP>>
+
+
+
+servidorInterno - bancoDeDados : <<ODBC>>
+servidorExterno - servidorInterno : <<HTTP>>
+dispositivoMonitoramento -- servidorInterno : <<MQTT>>
+dispositivoFuncionario -- servidorInterno : <<HTTP>>
+clienteWeb -- servidorExterno : <<HTTP>>
+clienteMobile -- servidorExterno : <<HTTP>>
+
+@enduml
