@@ -10,7 +10,7 @@ package pack as "UniVacinas" {
 			}
 			package  pack14 as  "Sistema de Convênios" {
 			}
-			package  pack15 as  "Autencação" {
+			package  pack15 as  "Autenticação" {
 			}
 		}
          }
