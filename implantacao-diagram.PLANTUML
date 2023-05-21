@@ -1,0 +1,45 @@
+@startuml
+package pack as UniVacinas {
+ package   pack1 as  "Serviços terceiros" {
+  package  pack11  as "Sistema de Pagamentos" {
+  }
+  package  pack12  as "Sistema SI-PNI" {
+  }
+  package  pack13  as "Sistema de Fornecedores" {
+  }
+  package  pack14 as  "Sistema de Convênios" {
+  }
+  package  pack15 as  "Autencação" {
+  }
+ }
+
+ package pack2 as "Serviço Cloud" {
+  package pack21 as "Máquina Virtual Sistema Interno" {
+  }
+  package pack22 as "Máquina Virtual Sistema Externo" {
+  }
+  package pack23 as "Banco de dados" {
+  }
+ }
+
+ package pack3 as "Hospital" {
+  package pack31 as "Aplicação DESKTOP Monitoramento" {
+  }
+  package pack32 as "Aplicação DESKTOP Funcionário" {
+  }
+ }
+
+ package pack4 as "Cliente" {
+  package pack41 as "Aplicação WEB" {
+  }
+  package pack42 as "Aplicação Nativa" {
+  }
+ }
+}
+
+pack21 -> pack1 : hello
+pack21 -> pack23 : hello
+pack22 -> pack21 : hello
+pack3 -> pack21 : hello
+pack4 -> pack22 : hello
+@enduml
