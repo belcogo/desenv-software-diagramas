@@ -2,13 +2,13 @@
 database bancoDeDados as "Banco de Dados Corporativo"
 
 node servidorInterno as "Servidor Aplicação Interna"{
-component Monitoramento
 component Funcionario
+component Monitoramento
 }
 
 node servidorExterno as "Servidor Aplicação Externa"{
-component Mobile
 component WEB
+component Mobile
 }
 
 node servicoSIPNI as "Servidor Serviço SI-PNI"{
@@ -42,6 +42,7 @@ component Remedios
 node dispositivoMonitoramento as "Dispositivo Monitoramento"{
 component Imagens
 component Videos
+component Sensores
 }
 
 
