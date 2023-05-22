@@ -32,8 +32,7 @@ component Google
 }
 
 node dispositivoFuncionario as "Dispositivo Funcionário"{
-component Vacinas
-component Remedios
+component Funcionalidade
 }
 
 node dispositivoMonitoramento as "Dispositivo Monitoramento"{
@@ -51,18 +50,23 @@ node clienteMobile as "Cliente Externo Mobile"{
 component AplicacaoWEB
 }
 
+node apresentacao as "Apresentação"{
+component Vacina
+component Remedio
+}
 
+servidorInterno -- apresentacao : <<HTTP>>
 servidorInterno -- servicoPagamento : <<HTTP>>
 servidorInterno -- servicoFornecedores : <<HTTP>>
 servidorInterno -- servicoSIPNI : <<HTTP>>
 servidorInterno -- servicoConvenios : <<HTTP>>
 servidorInterno -- servicoAutenticacao : <<HTTP>>
-
+dispositivoFuncionario -- apresentacao : <<HTTP>>
 
 servidorInterno - bancoDeDados : <<ODBC>>
 servidorExterno - servidorInterno : <<HTTP>>
 dispositivoMonitoramento -- servidorInterno : <<MQTT>>
-dispositivoFuncionario -- servidorInterno : <<HTTP>>
+
 clienteWeb -- servidorExterno : <<HTTP>>
 clienteMobile -- servidorExterno : <<HTTP>>
 @enduml
