@@ -1,39 +1,12 @@
 @startuml
 package system as "UniVacinas" {
-	together {
-		package   externalServices as  "Serviços terceiros" {
-			package  payment  as "Sistema de Pagamentos" {
-			}
-			package  sipni  as "Sistema SI-PNI" {
-			}
-			package  suppliers  as "Sistema de Fornecedores" {
-			}
-			package  convenants as  "Sistema de Convênios" {
-			}
-			package  auth as  "Autenticação" {
-			}
-		}
-	}
-	together {
-		package cloud as "Serviço Cloud" {
-			package internalSystem as "Sistema interno" {
-				package domain as "Domínio" {
-				        package vaccine as "Vacina" {
-				        }
-				        package user as "Usuário" {
-				        }
-				        package storage as "Estoque" {
-				        }
-				        package service as "Atendimento" {
-				        }
-				        package purchase as "Compra" {
-				        }
+	package cloud as "Serviço Cloud" {
+
+		together {
+			package presentationView as "Visão" {
+				package client as "Visão Cliente" {
 				}
-				together {
-					package crosscuttingClient as "ConexaoServidor" {
-					}
-					package crosscuttingDatabase as "ConexaoBancoDeDados" {
-					}
+				package employee as "Visão Funcionário" {
 				}
 			}
 			package interface as "Aplicação" {
@@ -45,24 +18,53 @@ package system as "UniVacinas" {
 				}
 			}
 
-			together {
-				package presentationView as "Visão" {
-					package client as "Visão Cliente" {
-					}
-					package employee as "Visão Funcionário" {
-					}
+		}
+		package internalSystem as "Sistema interno" {
+			package domain as "Domínio" {
+				package vaccine as "Vacina" {
+				}
+				package user as "Usuário" {
+				}
+				package storage as "Estoque" {
+				}
+				package service as "Atendimento" {
+				}
+				package purchase as "Compra" {
 				}
 			}
-
-			package database as "Banco de dados" {
+			together {
+				package crosscuttingClient as "ConexaoServidor" {
+				}
+				package crosscuttingDatabase as "ConexaoBancoDeDados" {
+				}
 			}
+		}
+		package database as "Banco de dados" {
+		}
+
+	}
+	package   externalServices as  "Serviços terceiros" {
+		package  payment  as "Sistema de Pagamentos" {
+		}
+		package  sipni  as "Sistema SI-PNI" {
+		}
+		package  suppliers  as "Sistema de Fornecedores" {
+		}
+		package  convenants as  "Sistema de Convênios" {
+		}
+		package  auth as  "Autenticação" {
 		}
 	}
 }
 
-cloud -[hidden]-> externalServices
-domain -[hidden]-> crosscuttingClient
-interface -[hidden]-> presentationView
+
+domain -[hidden]-> crosscuttingDatabase
 internalSystem -[hidden]-> database
+cloud -[hidden]-> externalServices
+
+interface -> presentationView
+interface -> internalSystem
+crosscuttingDatabase -> database
+crosscuttingClient -> externalServices
 
 @enduml
