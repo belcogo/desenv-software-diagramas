@@ -1,0 +1,70 @@
+@startuml
+database bancoDeDados as "Banco de Dados Corporativo"
+
+node servidorInterno as "Servidor Aplicação Interna"{
+component Monitoramento
+component Funcionario
+}
+
+node servidorExterno as "Servidor Aplicação Externa"{
+component Mobile
+component WEB
+}
+
+node servicoSIPNI as "Servidor Serviço SI-PNI"{
+component RiscoEpidemia
+component RiscoSurto
+}
+
+node servicoPagamento as "Servidor Serviço de Pagamentos"{
+component FormaPagamento
+component Desconto
+}
+
+node servicoFornecedores as "Servidor Serviço de Fornecedores"{
+component FornecedorRemedios
+component FornecedorVacinas
+}
+
+node servicoConvenios as "Servidor Serviço de Convênios"{
+component Convenio
+}
+
+node servicoAutenticacao as "Servidor Serviço de Autenticação"{
+component Google
+}
+
+node dispositivoFuncionario as "Dispositivo Funcionário"{
+component Vacinas
+component Remedios
+}
+
+node dispositivoMonitoramento as "Dispositivo Monitoramento"{
+component Imagens
+component Videos
+}
+
+
+node clienteWeb as "Cliente Externo Web" {
+component AplicacaoNativa
+}
+
+node clienteMobile as "Cliente Externo Mobile"{
+component AplicacaoWEB
+}
+
+
+servidorInterno -- servicoPagamento : <<HTTP>>
+servidorInterno -- servicoFornecedores : <<HTTP>>
+servidorInterno -- servicoSIPNI : <<HTTP>>
+servidorInterno -- servicoConvenios : <<HTTP>>
+servidorInterno -- servicoAutenticacao : <<HTTP>>
+
+
+servidorInterno - bancoDeDados : <<ODBC>>
+servidorExterno - servidorInterno : <<HTTP>>
+dispositivoMonitoramento -- servidorInterno : <<MQTT>>
+dispositivoFuncionario -- servidorInterno : <<HTTP>>
+clienteWeb -- servidorExterno : <<HTTP>>
+clienteMobile -- servidorExterno : <<HTTP>>
+@enduml
