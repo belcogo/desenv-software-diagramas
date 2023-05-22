@@ -6,10 +6,7 @@ component Funcionario
 component Monitoramento
 }
 
-node servidorExterno as "Servidor Aplicação Externa"{
-component WEB
-component Mobile
-}
+node servidorExterno as "Servidor Aplicação Externa"
 
 node servicoSIPNI as "Servidor Serviço SI-PNI"{
 component RiscoEpidemia
