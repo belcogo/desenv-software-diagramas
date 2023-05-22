@@ -1,51 +1,68 @@
 @startuml
-package pack as "UniVacinas" {
+package system as "UniVacinas" {
 	together {
-		package   pack1 as  "Serviços terceiros" {
-			package  pack11  as "Sistema de Pagamentos" {
+		package   externalServices as  "Serviços terceiros" {
+			package  payment  as "Sistema de Pagamentos" {
 			}
-			package  pack12  as "Sistema SI-PNI" {
+			package  sipni  as "Sistema SI-PNI" {
 			}
-			package  pack13  as "Sistema de Fornecedores" {
+			package  suppliers  as "Sistema de Fornecedores" {
 			}
-			package  pack14 as  "Sistema de Convênios" {
+			package  convenants as  "Sistema de Convênios" {
 			}
-			package  pack15 as  "Autenticação" {
-			}
-		}
-         }
-         together {
-		package pack3 as "Hospital" {
-			package pack31 as "Aplicação DESKTOP Monitoramento" {
-			}
-			package pack32 as "Aplicação DESKTOP Funcionário" {
+			package  auth as  "Autenticação" {
 			}
 		}
-		package pack2 as "Serviço Cloud" {
-			package pack21 as "Máquina Virtual Sistema Interno" {
+	}
+	together {
+		package cloud as "Serviço Cloud" {
+			package internalSystem as "Sistema interno" {
+				package domain as "Domínio" {
+				        package vaccine as "Vacina" {
+				        }
+				        package user as "Usuário" {
+				        }
+				        package storage as "Estoque" {
+				        }
+				        package service as "Atendimento" {
+				        }
+				        package purchase as "Compra" {
+				        }
+				}
+				together {
+					package crosscuttingClient as "ConexaoServidor" {
+					}
+					package crosscuttingDatabase as "ConexaoBancoDeDados" {
+					}
+				}
 			}
-                        package pack22 as "Máquina Virtual Sistema Externo" {
+			package interface as "Aplicação" {
+				package mobile as "APP" {
+				}
+				package web as "Website" {
+				}
+				package desktop as "AppDesktop" {
+				}
 			}
-                        package pack23 as "Banco de dados" {
+
+			together {
+				package presentationView as "Visão" {
+					package client as "Visão Cliente" {
+					}
+					package employee as "Visão Funcionário" {
+					}
+				}
 			}
-		}
-         }
-         together {
-                package pack4 as "Cliente" {
-			package pack41 as "Aplicação WEB" {
-			}
-			package pack42 as "Aplicação Nativa" {
+
+			package database as "Banco de dados" {
 			}
 		}
 	}
 }
 
-pack1 -[hidden]-> pack3
-pack3 -[hidden]-> pack4
-
-pack21 -> pack1
-pack3 -> pack21
-pack21 -> pack23
-pack4 -> pack22
+cloud -[hidden]-> externalServices
+domain -[hidden]-> crosscuttingClient
+interface -[hidden]-> presentationView
+internalSystem -[hidden]-> database
 
 @enduml
