@@ -1,72 +1,96 @@
 @startuml
-database bancoDeDados as "Banco de Dados Corporativo"
 
-node servidorInterno as "Servidor Aplicação Interna"{
-component Funcionario
-component Monitoramento
+interface "REST API" as restApiAplicacaoInterna
+interface "MQTT API" as mqttApiAplicacaoInterna
+interface "REST API" as restApiAplicacaoExterna
+interface "Persistência" as interfacePersistencia
+
+database bancoDeDados as "Banco de Dados Corporativo" {
+    component sistemaGerenciamento as "Sistema Gerenciamento Banco de Dados"
 }
 
-node servidorExterno as "Servidor Aplicação Externa"
-
-node servicoSIPNI as "Servidor Serviço SI-PNI"{
-component RiscoEpidemia
-component RiscoSurto
-}
-
-node servicoPagamento as "Servidor Serviço de Pagamentos"{
-component FormaPagamento
-component Desconto
-}
-
-node servicoFornecedores as "Servidor Serviço de Fornecedores"{
-component FornecedorRemedios
-component FornecedorVacinas
-}
-
-node servicoConvenios as "Servidor Serviço de Convênios"{
-component Convenio
-}
-
-node servicoAutenticacao as "Servidor Serviço de Autenticação"{
-component Google
-}
-
-node dispositivoFuncionario as "Dispositivo Funcionário"{
-component Funcionalidade
-}
-
-node dispositivoMonitoramento as "Dispositivo Monitoramento"{
-component Imagens
-component Videos
-component Sensores
-}
-
+sistemaGerenciamento - interfacePersistencia
 
 node clienteWeb as "Cliente Externo Web" {
-component AplicacaoNativa
+    component clientViewWeb as "Visão Cliente Web"
 }
 
-node clienteMobile as "Cliente Externo Mobile"{
-component AplicacaoWEB
+node clienteMobile as "Cliente Externo Mobile" {
+    component clientViewApp as "Visão Cliente App"
 }
 
-node apresentacao as "Apresentação"{
-component Vacina
-component Remedio
+node servidorExterno as "Servidor Aplicação Externa" {
+    component aplicacaoExterna as "Aplicação Externa" {
+        component moduloCliente as "Cliente"
+    }
 }
 
-servidorInterno -- apresentacao : <<HTTP>>
-servidorInterno -- servicoPagamento : <<HTTP>>
-servidorInterno -- servicoFornecedores : <<HTTP>>
-servidorInterno -- servicoSIPNI : <<HTTP>>
-servidorInterno -- servicoConvenios : <<HTTP>>
-servidorInterno -- servicoAutenticacao : <<HTTP>>
-dispositivoFuncionario -- apresentacao : <<HTTP>>
+restApiAplicacaoExterna - aplicacaoExterna
+clientViewWeb --> restApiAplicacaoExterna : HTTP
+clientViewApp --> restApiAplicacaoExterna : HTTP
 
-servidorInterno - bancoDeDados : <<ODBC>>
-servidorExterno - servidorInterno : <<HTTP>>
-dispositivoMonitoramento -- servidorInterno : <<MQTT>>
+node dispositivoMonitoramento as "Dispositivo Monitoramento" {
+    component interfaceIOT as "Interface IOT"
+}
 
-clienteWeb -- servidorExterno : <<HTTP>>
-clienteMobile -- servidorExterno : <<HTTP>>
+node dispositivoFuncionario as "Dispositivo Funcionário" {
+    component viewFuncionario as "Visão Funcionário"
+}
+
+node servidorInterno as "Servidor Aplicação Interna" {
+    component aplicacaoInterna as "Aplicação Interna" {
+        component moduloAtendimento as "Atendimento"
+        component moduloVacina as "Vacina"
+        component moduloEstoque as "Estoque"
+        component moduloCompra as "Compra"
+        component moduloUsuario as "Usuario"
+    }
+}
+
+mqttApiAplicacaoInterna -- aplicacaoInterna
+restApiAplicacaoInterna -- aplicacaoInterna
+
+aplicacaoInterna -> interfacePersistencia : ODBC
+aplicacaoExterna --> restApiAplicacaoInterna : HTTP
+viewFuncionario --> restApiAplicacaoInterna : HTTP
+interfaceIOT --> mqttApiAplicacaoInterna : MQTT
+
+interface "REST API" as restApiAplicacaoPagamento
+node servicoPagamento as "Servidor Serviço de Pagamentos" {
+    component aplicacaoPagamento as "Aplicação Pagamentos"
+}
+aplicacaoPagamento -- restApiAplicacaoPagamento
+
+interface "REST API" as restApiAplicacaoSIPNI
+node servicoSIPNI as "Servidor Serviço SI-PNI" {
+    component aplicacaoSIPNI as "Aplicação SI-PNI"
+}
+aplicacaoSIPNI -- restApiAplicacaoSIPNI
+
+interface "REST API" as restApiAplicacaoFornecedores
+node servicoFornecedores as "Servidor Serviço de Fornecedores" {
+    component aplicacaoFornecedores as "Aplicação Fornecedores"
+}
+aplicacaoFornecedores -- restApiAplicacaoFornecedores
+
+interface "REST API" as restApiAplicacaoConvenios
+node servicoConvenios as "Servidor Serviço de Convênios" {
+    component aplicacaoConvenios as "Aplicação Convênios"
+}
+aplicacaoConvenios -- restApiAplicacaoConvenios
+
+interface "REST API" as restApiAplicacaoAutenticacao
+node servicoAutenticacao as "Servidor Serviço de Autenticação" {
+    component aplicacaoAutenticacao as "Aplicação Autenticação Google"
+}
+aplicacaoAutenticacao -- restApiAplicacaoAutenticacao
+
+aplicacaoInterna ---> restApiAplicacaoConvenios : HTTP
+aplicacaoInterna ---> restApiAplicacaoAutenticacao : HTTP
+aplicacaoInterna ---> restApiAplicacaoFornecedores : HTTP
+aplicacaoInterna ---> restApiAplicacaoPagamento : HTTP
+aplicacaoInterna ---> restApiAplicacaoSIPNI : HTTP
+
+
+
 @enduml
