@@ -1,97 +1,117 @@
 @startuml
 package system as "UNIVACINAS" {
-        package view as "VIEW" {
-	        package externalClientWeb as "Cliente Externo WEB" {
-                        package webClientVision as "Visão Cliente WEB" {
-                        }
-                }
-	        package externalClientMobile as "Cliente Externo Mobile" {
-                        package appClientVision as "Visão Cliente Mobile" {
-                        }
-                }
-	        package employeeDevice as "Dispositivo Funcionário" {
-                        package employeeVision as "Visão Funcionário" {
-                        }
-                }
-	        package monitoringDevice as "Dispositivo de Monitoramento" {
-                        package monitoringDeviceVision as "Interface IoT" {
-                        }
-                }
-        }
-        package presentation as "PRESENTATION" {
-                package externalServer as "Servidor Aplicação Externa" {
-                        package externalApplicationWrapper as "APPLICATION" {
-                                package externalApplication as "Aplicação Externa" {
-                                        package domain as "DOMAIN" {
-                                                package client as "Cliente" {
-                                                }
-                                        }
-                                }
-                        }
-                }
-                package internalServer as "Servidor Aplicação Interna" {
-                        package internalApplicationWrapper as "APPLICATION" {
-                                package internalApplication as "Aplicação Interna" {
-                                        package domain as "DOMAIN" {
-                                                package client as "Atendimento" {
-                                                }
-                                                package client as "Vacina" {
-                                                }
-                                                package client as "Estoque" {
-                                                }
-                                                package client as "Compra" {
-                                                }
-                                                package client as "Usuário" {
-                                                }
-                                        }
-                                }
-                        }
-                }
-                package thirdPartyServer as "Serviços Terceiros" {
-                        together {
-                                package paymentServer as "Servidor Serviço de Pagamentos" {
-                                        package paymentApplication as "Aplicação Pagamentos" {
-                                        }
-                                }
-                                package sipniServer as "Servidor Serviço SI-PNI" {
-                                        package sipniApplication as "Aplicação SI-PNI" {
-                                        }
-                                }
-                                package suppliersServer as "Servidor Serviço de Fornecedores" {
-                                        package suppliersApplication as "Aplicação Fornecedores" {
-                                        }
-                                }
-                        }
-                        together {
-                                package covenantsServer as "Servidor Serviço de Convênios" {
-                                        package covenantsApplication as "Aplicação Convênios" {
-                                        }
-                                }
-                                package authServer as "Servidor Serviço de Autenticação" {
-                                        package authApplication as "Aplicação Autenticação Google" {
-                                        }
-                                }
-                        }
-                }
-        }
-        package database as "Banco de Dados Corporativo" {
-        }
+	package view as "VIEW" {
+		package externalClientWeb as "Cliente Externo WEB" {
+			package webClientVision as "Visão Cliente WEB" {
+			}
+		}
+		package externalClientMobile as "Cliente Externo Mobile" {
+			package appClientVision as "Visão Cliente Mobile" {
+			}
+		}
+		package employeeDevice as "Dispositivo Funcionário" {
+			package employeeVision as "Visão Funcionário" {
+			}
+		}
+		package monitoringDevice as "Dispositivo de Monitoramento" {
+			package monitoringDeviceVision as "Interface IoT" {
+			}
+		}
+	}
+	together {
+		package externalServer as "Servidor Aplicação Externa" {
+			package externalPresentation as "Apresentação" {			
+			}
+			package externalApplication as "Aplicação" {			
+			}
+			package externalDomain as "DOMAIN" {
+				package client as "Cliente" {
+				}
+			}
+		}
+		package internalServer as "Servidor Aplicação Interna" {
+			package internalPresentation as "Apresentação" {			
+			}
+			package internalApplication as "Aplicação" {			
+			}
+			package innternalDomain as "Domínio" {
+				package appointment as "Atendimento" {
+				}
+				package vaccine as "Vacina" {
+				}
+				package storage as "Estoque" {
+				}
+				package purchase as "Compra" {
+				}
+				package user as "Usuário" {
+				}
+			}
+		}
+	}
+	package thirdPartyServer as "Serviços Terceiros" {
+		together {
+			package paymentServer as "Servidor Serviço de Pagamentos" {
+				package paymentPresentation as "Apresentação" {
+				}
+				package paymentApplication as "Aplicação" {
+				}
+				package paymentDomain as "Domínio" {
+				}
+			}
+			package sipniServer as "Servidor Serviço SI-PNI" {
+				package sipniPresentation as "Apresentação" {
+				}
+				package sipniApplication as "Aplicação" {
+				}
+				package sipniDomain as "Domínio" {
+				}
+			}
+			package suppliersServer as "Servidor Serviço de Fornecedores" {
+				package suppliersPresentation as "Apresentação" {
+				}
+				package suppliersApplication as "Aplicação" {
+				}
+				package suppliersDomain as "Domínio" {
+				}
+			}
+		}
+		together {
+			package covenantsServer as "Servidor Serviço de Convênios" {
+				package covenantsPresentation as "Apresentação" {
+				}
+				package covenantsApplication as "Aplicação" {
+				}
+				package covenantsDomain as "Domínio" {
+				}
+			}
+			package authServer as "Servidor Serviço de Autenticação" {
+				package authPresentation as "Apresentação" {
+				}
+				package authApplication as "Aplicação" {
+				}
+				package authDomain as "Domínio" {
+				}
+			}
+		}
+	}
+	package database as "Banco de Dados Corporativo" {
+	}
 }
 
 paymentServer -[hidden]-> covenantsServer
 internalServer -[hidden]-> thirdPartyServer
-view -[hidden]-> presentation
+view -[hidden]-> externalServer
 
-webClientVision -> externalApplication
-appClientVision -> externalApplication
-externalApplication -> internalApplication
-employeeVision -> internalApplication
-monitoringDeviceVision -> internalApplication
+webClientVision -> externalPresentation
+appClientVision -> externalPresentation
+externalApplication -> internalPresentation
+employeeVision -> internalPresentation
+monitoringDeviceVision -> internalPresentation
 internalApplication -> database
-internalApplication -> paymentApplication
-internalApplication -> sipniApplication
-internalApplication -> suppliersApplication
-internalApplication -> covenantsApplication
-internalApplication -> authApplication
+internalApplication -> paymentPresentation
+internalApplication -> sipniPresentation
+internalApplication -> suppliersPresentation
+internalApplication -> covenantsPresentation
+internalApplication -> authPresentation
 
 @enduml
